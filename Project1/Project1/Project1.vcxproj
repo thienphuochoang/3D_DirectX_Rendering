@@ -132,6 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CustomException.cpp" />
+    <ClCompile Include="UserInput.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="WindowMessageMap.cpp" />
     <ClCompile Include="WinMain.cpp" />
@@ -140,6 +141,7 @@
     <ClInclude Include="CustomException.h" />
     <ClInclude Include="CustomWin.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="UserInput.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="WindowMessageMap.h" />
   </ItemGroup>

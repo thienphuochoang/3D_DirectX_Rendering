@@ -107,6 +107,37 @@ LRESULT Window::HandleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
             PostQuitMessage(0);
             return 0;
         }
+
+        // Clear keystate when the user clicks on other applications, the window loses focus so it
+        // doesn't get stuck on the keydown state
+        case WM_KILLFOCUS:
+        {
+            userInput.ClearState();
+            break;
+        }
+
+        /* USER INPUT MESSAGES */
+        case WM_KEYDOWN:
+        case WM_SYSKEYDOWN:
+        {
+            // Filter auto repeat key events
+            if (!(lParam & 0x40000000) || userInput.IsAutoRepeatEnabled()) 
+            {
+                userInput.OnKeyPressed(static_cast<unsigned char>(wParam));
+            }
+            break;
+        }
+        case WM_KEYUP:
+        case WM_SYSKEYUP:
+        {
+            userInput.OnKeyReleased(static_cast<unsigned char>(wParam));
+            break;
+        }
+        case WM_CHAR:
+        {
+            userInput.OnChar(static_cast<unsigned char>(wParam));
+            break;
+        }
     }
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
