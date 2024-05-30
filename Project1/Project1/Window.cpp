@@ -112,30 +112,73 @@ LRESULT Window::HandleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         // doesn't get stuck on the keydown state
         case WM_KILLFOCUS:
         {
-            userInput.ClearState();
+            keyboardInput.ClearState();
             break;
         }
 
-        /* USER INPUT MESSAGES */
+        /* KEYBOARD INPUT MESSAGES */
         case WM_KEYDOWN:
         case WM_SYSKEYDOWN:
         {
             // Filter auto repeat key events
-            if (!(lParam & 0x40000000) || userInput.IsAutoRepeatEnabled()) 
+            if (!(lParam & 0x40000000) || keyboardInput.IsAutoRepeatEnabled())
             {
-                userInput.OnKeyPressed(static_cast<unsigned char>(wParam));
+                keyboardInput.OnKeyPressed(static_cast<unsigned char>(wParam));
             }
             break;
         }
         case WM_KEYUP:
         case WM_SYSKEYUP:
         {
-            userInput.OnKeyReleased(static_cast<unsigned char>(wParam));
+            keyboardInput.OnKeyReleased(static_cast<unsigned char>(wParam));
             break;
         }
         case WM_CHAR:
         {
-            userInput.OnChar(static_cast<unsigned char>(wParam));
+            keyboardInput.OnChar(static_cast<unsigned char>(wParam));
+            break;
+        }
+        /* MOUSE INPUT MESSAGES */
+        case WM_MOUSEMOVE:
+        {
+            POINTS point = MAKEPOINTS(lParam);
+            mouseInput.OnMouseMove(point.x, point.y);
+        }
+        case WM_LBUTTONDOWN:
+        {
+            const POINTS point = MAKEPOINTS(lParam);
+            mouseInput.OnLeftMousePressed(point.x, point.y);
+            break;
+        }
+        case WM_RBUTTONDOWN:
+        {
+            const POINTS point = MAKEPOINTS(lParam);
+            mouseInput.OnRightMousePressed(point.x, point.y);
+            break;
+        }
+        case WM_LBUTTONUP:
+        {
+            const POINTS point = MAKEPOINTS(lParam);
+            mouseInput.OnLeftMouseReleased(point.x, point.y);
+            break;
+        }
+        case WM_RBUTTONUP:
+        {
+            const POINTS point = MAKEPOINTS(lParam);
+            mouseInput.OnRightMouseReleased(point.x, point.y);
+            break;
+        }
+        case WM_MOUSEWHEEL:
+        {
+            const POINTS point = MAKEPOINTS(lParam);
+            if (GET_WHEEL_DELTA_WPARAM(wParam) > 0)
+            {
+                mouseInput.OnMouseWheelUp(point.x, point.y);
+            }
+            else if (GET_WHEEL_DELTA_WPARAM(wParam) < 0)
+            {
+                mouseInput.OnMouseWheelDown(point.x, point.y);
+            }
             break;
         }
     }

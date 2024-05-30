@@ -1,11 +1,12 @@
-#include "UserInput.h"
+#include "KeyboardInput.h"
+#include "MouseInput.h"
 
-bool UserInput::IsKeyPressed(unsigned char keycode) const
+bool KeyboardInput::IsKeyPressed(unsigned char keycode) const
 {
     return keyStates[keycode];
 }
 
-UserInput::Event UserInput::ReadKey()
+KeyboardInput::Event KeyboardInput::ReadKey()
 {
     if (keyBuffer.size() > 0)
     {
@@ -16,17 +17,17 @@ UserInput::Event UserInput::ReadKey()
     return Event();
 }
 
-bool UserInput::IsKeyEmpty() const
+bool KeyboardInput::IsKeyEmpty() const
 {
     return keyBuffer.empty();
 }
 
-void UserInput::ClearKey()
+void KeyboardInput::ClearKey()
 {
     keyBuffer = std::queue<Event>();
 }
 
-char UserInput::ReadChar()
+char KeyboardInput::ReadChar()
 {
     if (charBuffer.size() > 0)
     {
@@ -37,66 +38,66 @@ char UserInput::ReadChar()
     return 0;
 }
 
-bool UserInput::IsCharEmpty() const
+bool KeyboardInput::IsCharEmpty() const
 {
     return charBuffer.empty();
 }
 
-void UserInput::ClearChar()
+void KeyboardInput::ClearChar()
 {
     charBuffer = std::queue<char>();
 }
 
-void UserInput::ClearAll()
+void KeyboardInput::ClearAll()
 {
     ClearKey();
     ClearChar();
 }
 
-void UserInput::EnableAutoRepeat()
+void KeyboardInput::EnableAutoRepeat()
 {
     autoRepeatEnabled = true;
 }
 
-void UserInput::DisableAutoRepeat()
+void KeyboardInput::DisableAutoRepeat()
 {
     autoRepeatEnabled = false;
 }
 
-bool UserInput::IsAutoRepeatEnabled() const
+bool KeyboardInput::IsAutoRepeatEnabled() const
 {
     return autoRepeatEnabled;
 }
 
-void UserInput::OnKeyPressed(unsigned char keycode)
+void KeyboardInput::OnKeyPressed(unsigned char keycode)
 {
     keyStates[keycode] = true;
-    Event newKeycodeEvent = Event(UserInput::Event::Type::Press, keycode);
+    Event newKeycodeEvent = Event(KeyboardInput::Event::Type::Press, keycode);
     keyBuffer.push(newKeycodeEvent);
     TrimBuffer(keyBuffer);
 }
 
-void UserInput::OnKeyReleased(unsigned char keycode)
+void KeyboardInput::OnKeyReleased(unsigned char keycode)
 {
     keyStates[keycode] = false;
-    Event newKeycodeEvent = Event(UserInput::Event::Type::Release, keycode);
+    Event newKeycodeEvent = Event(KeyboardInput::Event::Type::Release, keycode);
     keyBuffer.push(newKeycodeEvent);
     TrimBuffer(keyBuffer);
 }
 
-void UserInput::OnChar(char character)
+void KeyboardInput::OnChar(char character)
 {
     charBuffer.push(character);
     TrimBuffer(charBuffer);
 }
 
-void UserInput::ClearState()
+void KeyboardInput::ClearState()
 {
     keyStates.reset();
 }
 
 template<typename T>
-void UserInput::TrimBuffer(std::queue<T>& buffer)
+void KeyboardInput::TrimBuffer(std::queue<T>& buffer)
 {
     while (buffer.size() > bufferSize)
     {
@@ -104,36 +105,34 @@ void UserInput::TrimBuffer(std::queue<T>& buffer)
     }
 }
 
-UserInput::Event::Event()
+KeyboardInput::Event::Event()
 {
     type = Type::Invalid;
     code = 0;
 }
 
-UserInput::Event::Event(Type type, unsigned char code)
+KeyboardInput::Event::Event(Type type, unsigned char code)
 {
     this->type = type;
     this->code = code;
 }
 
-bool UserInput::Event::IsPressed() const
+bool KeyboardInput::Event::IsPressed() const
 {
     return type == Type::Press;
 }
 
-bool UserInput::Event::IsReleased() const
+bool KeyboardInput::Event::IsReleased() const
 {
     return type == Type::Release;
 }
 
-bool UserInput::Event::IsValid() const
+bool KeyboardInput::Event::IsValid() const
 {
     return type != Type::Invalid;
 }
 
-unsigned char UserInput::Event::GetCode() const
+unsigned char KeyboardInput::Event::GetCode() const
 {
     return code;
 }
-
-

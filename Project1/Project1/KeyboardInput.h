@@ -1,7 +1,7 @@
 #pragma once
 #include <queue>
 #include <bitset>
-class UserInput
+class KeyboardInput
 {
     // Let the Window Class get and use the Properties and Methods (private, protected) of this class
     friend class Window;
@@ -26,9 +26,9 @@ public:
         unsigned char code;
     };
 public:
-    UserInput() = default;
-    UserInput(const UserInput&) = delete;
-    UserInput& operator=(const UserInput&) = delete;
+    KeyboardInput() = default;
+    KeyboardInput(const KeyboardInput&) = delete;
+    KeyboardInput& operator=(const KeyboardInput&) = delete;
     // Key event
     // Check if a specific key is pressed
     bool IsKeyPressed(unsigned char keycode) const;

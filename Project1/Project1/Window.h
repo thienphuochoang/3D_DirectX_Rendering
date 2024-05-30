@@ -1,7 +1,8 @@
 #pragma once
 #include "CustomWin.h"
 #include "CustomException.h"
-#include "UserInput.h"
+#include "KeyboardInput.h"
+#include "MouseInput.h"
 
 class Window
 {
@@ -39,7 +40,8 @@ public:
     ~Window();
     Window(const Window&) = delete;
     Window& operator=(const Window&) = delete;
-    UserInput userInput;
+    KeyboardInput keyboardInput;
+    MouseInput mouseInput;
 private:
     int width;
     int height;
