@@ -64,6 +64,8 @@ Window::Window(int inputWidth, int inputHeight, const char* name)
         throw LAST_CUSTOM_EXCEPTION();
     }
     ShowWindow(hWnd, SW_SHOWDEFAULT);
+
+    pGfx = std::make_unique<Graphics>(hWnd);
 }
 
 Window::~Window()
@@ -94,6 +96,11 @@ std::optional<int> Window::ProcessMessages()
         DispatchMessage(&msg);
     }
     return {};
+}
+
+Graphics& Window::Gfx()
+{
+    return *pGfx;
 }
 
 LRESULT WINAPI Window::HandleMessageSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)

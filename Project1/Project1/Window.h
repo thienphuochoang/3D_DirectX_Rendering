@@ -3,7 +3,9 @@
 #include "CustomException.h"
 #include "KeyboardInput.h"
 #include "MouseInput.h"
+#include "Graphics.h"
 #include <optional>
+#include <memory>
 
 class Window
 {
@@ -45,10 +47,12 @@ public:
     MouseInput mouseInput;
     void SetTitle(const std::string& newTitle);
     static std::optional<int> ProcessMessages();
+    Graphics& Gfx();
 private:
     int width;
     int height;
     HWND hWnd;
+    std::unique_ptr<Graphics> pGfx;
     static LRESULT CALLBACK HandleMessageSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
     static LRESULT CALLBACK HandleMessageThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
     LRESULT HandleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
