@@ -125,6 +125,7 @@ LRESULT Window::HandleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         }
 
         /* KEYBOARD INPUT MESSAGES */
+        #pragma region KEYBOARD_INPUT_MESSAGES
         case WM_KEYDOWN:
         case WM_SYSKEYDOWN:
         {
@@ -146,11 +147,37 @@ LRESULT Window::HandleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
             keyboardInput.OnChar(static_cast<unsigned char>(wParam));
             break;
         }
+        #pragma endregion
         /* MOUSE INPUT MESSAGES */
+        #pragma region MOUSE_INPUT_MESSAGES
         case WM_MOUSEMOVE:
         {
             POINTS point = MAKEPOINTS(lParam);
-            mouseInput.OnMouseMove(point.x, point.y);
+            // Check if the mouse position is in the window region, capture mouse position
+            if (point.x >= 0 && point.x < width && point.y >= 0 && point.y < height)
+            {
+                mouseInput.OnMouseMove(point.x, point.y);
+                if (!mouseInput.IsMouseInWindow())
+                {
+                    SetCapture(hWnd);
+                    mouseInput.OnMouseEnter();
+                }
+            }
+            // If the mouse position is not in the window region, still capture the mouse position
+            // if the button is down
+            else
+            {
+                if (wParam & (MK_LBUTTON | MK_RBUTTON))
+                {
+                    mouseInput.OnMouseMove(point.x, point.y);
+                }
+                // If the button is released
+                else
+                {
+                    ReleaseCapture();
+                    mouseInput.OnMouseLeave();
+                }
+            }
         }
         case WM_LBUTTONDOWN:
         {
@@ -179,16 +206,11 @@ LRESULT Window::HandleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         case WM_MOUSEWHEEL:
         {
             const POINTS point = MAKEPOINTS(lParam);
-            if (GET_WHEEL_DELTA_WPARAM(wParam) > 0)
-            {
-                mouseInput.OnMouseWheelUp(point.x, point.y);
-            }
-            else if (GET_WHEEL_DELTA_WPARAM(wParam) < 0)
-            {
-                mouseInput.OnMouseWheelDown(point.x, point.y);
-            }
+            const int delta = GET_WHEEL_DELTA_WPARAM(wParam);
+            mouseInput.OnMouseWheelDelta(point.x, point.y, delta);
             break;
         }
+        #pragma endregion
     }
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }

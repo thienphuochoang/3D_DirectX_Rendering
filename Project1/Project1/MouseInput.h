@@ -16,6 +16,8 @@ public:
             WheelUp,
             WheelDown,
             Move,
+            Enter,
+            Leave,
             Invalid
         };
         Event();
@@ -41,6 +43,7 @@ public:
     std::pair<int, int> GetPos() const;
     int GetPosX() const;
     int GetPosY() const;
+    bool IsMouseInWindow() const;
     bool IsLeftMousePressed() const;
     bool IsRightMousePressed() const;
     MouseInput::Event Read();
@@ -53,13 +56,18 @@ private:
     bool leftMousePressed = false;
     bool rightMousePressed = false;
     std::queue<Event> buffer;
+    bool isMouseInWindow = false;
+    int wheelDelta = 0;
     void OnMouseMove(int x, int y);
+    void OnMouseEnter();
+    void OnMouseLeave();
     void OnLeftMousePressed(int x, int y);
     void OnLeftMouseReleased(int x, int y);
     void OnRightMousePressed(int x, int y);
     void OnRightMouseReleased(int x, int y);
     void OnMouseWheelUp(int x, int y);
     void OnMouseWheelDown(int x, int y);
+    void OnMouseWheelDelta(int x, int y, int delta);
     void TrimBuffer();
 };
 

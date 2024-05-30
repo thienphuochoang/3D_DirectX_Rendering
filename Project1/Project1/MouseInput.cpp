@@ -1,5 +1,5 @@
 #include "MouseInput.h"
-
+#include "Window.h"
 MouseInput::Event::Event()
 {
     type = Type::Invalid;
@@ -73,6 +73,11 @@ int MouseInput::GetPosY() const
     return y;
 }
 
+bool MouseInput::IsMouseInWindow() const
+{
+    return isMouseInWindow;
+}
+
 bool MouseInput::IsLeftMousePressed() const
 {
     return leftMousePressed;
@@ -99,6 +104,20 @@ void MouseInput::OnMouseMove(int x, int y)
     this->x = x;
     this->y = y;
     buffer.push(MouseInput::Event(MouseInput::Event::Type::Move, *this));
+    TrimBuffer();
+}
+
+void MouseInput::OnMouseEnter()
+{
+    isMouseInWindow = true;
+    buffer.push(MouseInput::Event(MouseInput::Event::Type::Enter, *this));
+    TrimBuffer();
+}
+
+void MouseInput::OnMouseLeave()
+{
+    isMouseInWindow = false;
+    buffer.push(MouseInput::Event(MouseInput::Event::Type::Leave, *this));
     TrimBuffer();
 }
 
@@ -140,6 +159,23 @@ void MouseInput::OnMouseWheelDown(int x, int y)
 {
     buffer.push(MouseInput::Event(MouseInput::Event::Type::WheelDown, *this));
     TrimBuffer();
+}
+
+void MouseInput::OnMouseWheelDelta(int x, int y, int delta)
+{
+    wheelDelta += delta;
+    // generate events for every 120 (threshold)
+    // source: https://learn.microsoft.com/en-us/windows/win32/inputdev/wm-mousewheel
+    while (wheelDelta >= WHEEL_DELTA)
+    {
+        wheelDelta -= WHEEL_DELTA;
+        OnMouseWheelUp(x, y);
+    }
+    while (wheelDelta <= -WHEEL_DELTA)
+    {
+        wheelDelta += WHEEL_DELTA;
+        OnMouseWheelDown(x, y);
+    }
 }
 
 void MouseInput::TrimBuffer()
