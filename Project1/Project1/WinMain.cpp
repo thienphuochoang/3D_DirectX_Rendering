@@ -1,21 +1,11 @@
-#include "Window.h"
+#include "App.h"
 
 int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     try
     {
-        Window wnd(1280, 720, "Cheap Engine");
-        MSG msg;
-        BOOL result;
-        while ((result = GetMessage(&msg, nullptr, 0, 0)) > 0)
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-        }
-        if (result == -1)
-            return -1;
-        // wParam is the value passed to the PostQuitMessage
-        return msg.wParam;
+        App app;
+        return app.Begin();
     }
     catch (const CustomException& e)
     {

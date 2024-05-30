@@ -3,6 +3,7 @@
 #include "CustomException.h"
 #include "KeyboardInput.h"
 #include "MouseInput.h"
+#include <optional>
 
 class Window
 {
@@ -43,6 +44,7 @@ public:
     KeyboardInput keyboardInput;
     MouseInput mouseInput;
     void SetTitle(const std::string& newTitle);
+    static std::optional<int> ProcessMessages();
 private:
     int width;
     int height;
