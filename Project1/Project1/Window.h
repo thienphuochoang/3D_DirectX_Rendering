@@ -42,6 +42,7 @@ public:
     Window& operator=(const Window&) = delete;
     KeyboardInput keyboardInput;
     MouseInput mouseInput;
+    void SetTitle(const std::string& newTitle);
 private:
     int width;
     int height;

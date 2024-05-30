@@ -49,7 +49,7 @@ Window::Window(int inputWidth, int inputHeight, const char* name)
     rect.right = width + rect.left;
     rect.top = 100;
     rect.bottom = height + rect.top;
-    if (FAILED(AdjustWindowRect(&rect, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE)))
+    if (AdjustWindowRect(&rect, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE) == 0)
     {
         throw LAST_CUSTOM_EXCEPTION();
     }
@@ -69,6 +69,14 @@ Window::Window(int inputWidth, int inputHeight, const char* name)
 Window::~Window()
 {
     DestroyWindow(hWnd);
+}
+
+void Window::SetTitle(const std::string& newTitle)
+{
+    if (SetWindowTextA(hWnd, newTitle.c_str()) == 0)
+    {
+        throw LAST_CUSTOM_EXCEPTION();
+    }
 }
 
 LRESULT WINAPI Window::HandleMessageSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
