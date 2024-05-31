@@ -100,6 +100,10 @@ std::optional<int> Window::ProcessMessages()
 
 Graphics& Window::Gfx()
 {
+    if (!pGfx)
+    {
+        throw NOGFX_EXCEPT();
+    }
     return *pGfx;
 }
 
@@ -241,22 +245,22 @@ LRESULT Window::HandleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 // Window Exception
 
-Window::Exception::Exception(int line, const char* file, HRESULT hr) : 
-    CustomException(line, file), hr(hr)
+Window::HrException::HrException(int line, const char* file, HRESULT hr) :
+    Exception(line, file), hr(hr)
 {}
 
-const char* Window::Exception::what() const
+const char* Window::HrException::what() const
 {
     std::ostringstream oss;
     oss << GetType() << std::endl;
     oss << "[Error Code] " << GetErrorCode() << std::endl;
-    oss << "[Description] " << GetErrorString() << std::endl;
+    oss << "[Description] " << GetErrorDescription() << std::endl;
     oss << GetOriginString();
     whatBuffer = oss.str();
     return whatBuffer.c_str();
 }
 
-const char* Window::Exception::GetType() const
+const char* Window::HrException::GetType() const
 {
     return "Custom Window Exception";
 }
@@ -267,21 +271,29 @@ std::string Window::Exception::TranslateErrorCode(HRESULT hr)
     DWORD nMsgLen = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
         FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
         reinterpret_cast<LPSTR>(&pMsgBuff), 0, nullptr);
+    // 0 string length returned indicates a failure
     if (nMsgLen == 0)
     {
         return "Unidentified error code";
     }
+    // copy error string from windows-allocated buffer to std::string
     std::string errorString = pMsgBuff;
+    // free windows buffer
     LocalFree(pMsgBuff);
     return errorString;
 }
 
-HRESULT Window::Exception::GetErrorCode() const
+HRESULT Window::HrException::GetErrorCode() const
 {
     return hr;
 }
 
-std::string Window::Exception::GetErrorString() const
+std::string Window::HrException::GetErrorDescription() const
 {
     return TranslateErrorCode(hr);
+}
+
+const char* Window::NoGfxException::GetType() const
+{
+    return nullptr;
 }

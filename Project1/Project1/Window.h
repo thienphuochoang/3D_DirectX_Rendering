@@ -12,15 +12,26 @@ class Window
 public:
     class Exception : public CustomException
     {
+        using CustomException::CustomException;
     public:
-        Exception(int line, const char* file, HRESULT hr);
+        static std::string TranslateErrorCode(HRESULT hr);
+    };
+    class HrException : public Exception
+    {
+    public:
+        HrException(int line, const char* file, HRESULT hr);
         const char* what() const override;
         const char* GetType() const override;
-        static std::string TranslateErrorCode(HRESULT hr);
         HRESULT GetErrorCode() const;
-        std::string GetErrorString() const;
+        std::string GetErrorDescription() const;
     private:
         HRESULT hr;
+    };
+    class NoGfxException : public Exception
+    {
+    public:
+        using Exception::Exception;
+        const char* GetType() const override;
     };
 private:
     // Singleton manages registration/cleanup of window class
@@ -59,5 +70,6 @@ private:
 };
 
 // error exception macro
-#define CUSTOM_EXCEPTION(hr) Window::Exception(__LINE__, __FILE__, hr)
-#define LAST_CUSTOM_EXCEPTION() Window::Exception(__LINE__, __FILE__, GetLastError());
+#define CUSTOM_EXCEPTION(hr) Window::HrException(__LINE__, __FILE__, hr)
+#define LAST_CUSTOM_EXCEPTION() Window::HrException(__LINE__, __FILE__, GetLastError());
+#define NOGFX_EXCEPT() Window::NoGfxException( __LINE__,__FILE__ )
