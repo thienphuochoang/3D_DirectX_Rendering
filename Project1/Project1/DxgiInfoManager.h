@@ -2,14 +2,16 @@
 #include "CustomWin.h"
 #include <vector>
 #include <string>
+#include <wrl.h>
+#include <dxgidebug.h>
 class DxgiInfoManager
 {
 private:
     unsigned long long next = 0;
-    struct IDXGIInfoQueue* pDxgiInfoQueue = nullptr;
+    Microsoft::WRL::ComPtr<IDXGIInfoQueue> pDxgiInfoQueue;
 public:
     DxgiInfoManager();
-    ~DxgiInfoManager();
+    ~DxgiInfoManager() = default;
     DxgiInfoManager(const DxgiInfoManager&) = delete;
     DxgiInfoManager& operator=(const DxgiInfoManager&) = delete;
     void Set();

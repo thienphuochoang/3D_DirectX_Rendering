@@ -3,6 +3,7 @@
 #include "CustomException.h"
 #include <d3d11.h>
 #include <vector>
+#include <wrl.h>
 #include "DxgiInfoManager.h"
 
 class Graphics
@@ -26,6 +27,16 @@ public:
         HRESULT hr;
         std::string info;
     };
+    class InfoException : public Exception
+    {
+    private:
+        std::string info;
+    public:
+        InfoException(int line, const char* file, std::vector<std::string> infoMsgs = {});
+        const char* what() const override;
+        const char* GetType() const override;
+        std::string GetErrorInfo() const;
+    };
     class DeviceRemovedException : public HrException
     {
         using HrException::HrException;
@@ -37,10 +48,10 @@ public:
 private:
     // Pointers to hold the necessary datas
     // Source: https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nf-d3d11-d3d11createdeviceandswapchain
-    ID3D11Device* pDevice = nullptr;
-    IDXGISwapChain* pSwap = nullptr;
-    ID3D11DeviceContext* pContext = nullptr;
-    ID3D11RenderTargetView* pTarget = nullptr;
+    Microsoft::WRL::ComPtr<ID3D11Device> pDevice;
+    Microsoft::WRL::ComPtr<IDXGISwapChain> pSwap;
+    Microsoft::WRL::ComPtr<ID3D11DeviceContext> pContext;
+    Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pTarget;
 #ifndef NDEBUG
     DxgiInfoManager infoManager;
 #endif
@@ -48,8 +59,9 @@ public:
     Graphics(HWND hWnd);
     Graphics(const Graphics&) = delete;
     Graphics& operator=(const Graphics&) = delete;
-    ~Graphics();
+    ~Graphics() = default;
     void EndFrame();
     void ClearBuffer(float r, float g, float b);
+    void DrawTriangle();
 };
 
