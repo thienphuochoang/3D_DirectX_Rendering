@@ -19,6 +19,18 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{df520f24-971d-423c-a3a2-5108b1351888}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\GraphicsBinding">
+      <UniqueIdentifier>{f673d359-43fa-4dae-af15-fc63bbf117fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GraphicsBinding">
+      <UniqueIdentifier>{8fa13ee0-d385-4fbf-bd02-e4b28d17475a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GraphicsDrawing">
+      <UniqueIdentifier>{7e022012-e4a1-4136-9064-4ce0384dbcc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GraphicsDrawing">
+      <UniqueIdentifier>{5e350ed9-9bd3-4a39-85b3-b8b4c92fda84}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -53,6 +65,36 @@
     </ClCompile>
     <ClCompile Include="DxgiInfoManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsBinding.cpp">
+      <Filter>Source Files\GraphicsBinding</Filter>
+    </ClCompile>
+    <ClCompile Include="Topology.cpp">
+      <Filter>Source Files\GraphicsBinding</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexBuffer.cpp">
+      <Filter>Source Files\GraphicsBinding</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexBuffer.cpp">
+      <Filter>Source Files\GraphicsBinding</Filter>
+    </ClCompile>
+    <ClCompile Include="InputLayout.cpp">
+      <Filter>Source Files\GraphicsBinding</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexShader.cpp">
+      <Filter>Source Files\GraphicsBinding</Filter>
+    </ClCompile>
+    <ClCompile Include="PixelShader.cpp">
+      <Filter>Source Files\GraphicsBinding</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsDrawing.cpp">
+      <Filter>Source Files\GraphicsDrawing</Filter>
+    </ClCompile>
+    <ClCompile Include="Box.cpp">
+      <Filter>Source Files\GraphicsDrawing</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformConstantBuffer.cpp">
+      <Filter>Source Files\GraphicsBinding</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +133,45 @@
     </ClInclude>
     <ClInclude Include="DxgiInfoManager.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomMacros.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsBinding.h">
+      <Filter>Header Files\GraphicsBinding</Filter>
+    </ClInclude>
+    <ClInclude Include="Topology.h">
+      <Filter>Header Files\GraphicsBinding</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBuffer.h">
+      <Filter>Header Files\GraphicsBinding</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexBuffer.h">
+      <Filter>Header Files\GraphicsBinding</Filter>
+    </ClInclude>
+    <ClInclude Include="InputLayout.h">
+      <Filter>Header Files\GraphicsBinding</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexShader.h">
+      <Filter>Header Files\GraphicsBinding</Filter>
+    </ClInclude>
+    <ClInclude Include="PixelShader.h">
+      <Filter>Header Files\GraphicsBinding</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantBuffer.h">
+      <Filter>Header Files\GraphicsBinding</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsDrawing.h">
+      <Filter>Header Files\GraphicsDrawing</Filter>
+    </ClInclude>
+    <ClInclude Include="Box.h">
+      <Filter>Header Files\GraphicsDrawing</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformConstantBuffer.h">
+      <Filter>Header Files\GraphicsBinding</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsDrawingBase.h">
+      <Filter>Header Files\GraphicsDrawing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

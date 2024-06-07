@@ -4,6 +4,7 @@
 #include "KeyboardInput.h"
 #include "MouseInput.h"
 #include "Graphics.h"
+#include "CustomMacros.h"
 #include <optional>
 #include <memory>
 
@@ -68,8 +69,3 @@ private:
     static LRESULT CALLBACK HandleMessageThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
     LRESULT HandleMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 };
-
-// error exception macro
-#define CUSTOM_EXCEPTION(hr) Window::HrException(__LINE__, __FILE__, hr)
-#define LAST_CUSTOM_EXCEPTION() Window::HrException(__LINE__, __FILE__, GetLastError());
-#define NOGFX_EXCEPT() Window::NoGfxException( __LINE__,__FILE__ )

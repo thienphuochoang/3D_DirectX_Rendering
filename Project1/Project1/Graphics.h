@@ -5,9 +5,11 @@
 #include <vector>
 #include <wrl.h>
 #include "DxgiInfoManager.h"
+#include <DirectXMath.h>
 
 class Graphics
 {
+    friend class GraphicsBinding;
 public:
     class Exception : public CustomException
     {
@@ -46,12 +48,14 @@ public:
         std::string reason;
     };
 private:
+    DirectX::XMMATRIX projection;
     // Pointers to hold the necessary datas
     // Source: https://learn.microsoft.com/en-us/windows/win32/api/d3d11/nf-d3d11-d3d11createdeviceandswapchain
     Microsoft::WRL::ComPtr<ID3D11Device> pDevice;
     Microsoft::WRL::ComPtr<IDXGISwapChain> pSwap;
     Microsoft::WRL::ComPtr<ID3D11DeviceContext> pContext;
     Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pTarget;
+    Microsoft::WRL::ComPtr<ID3D11DepthStencilView> pDepthStencilView;
 #ifndef NDEBUG
     DxgiInfoManager infoManager;
 #endif
@@ -62,6 +66,9 @@ public:
     ~Graphics() = default;
     void EndFrame();
     void ClearBuffer(float r, float g, float b);
-    void DrawTriangle();
+    void DrawTriangle(float angle, float x, float y);
+    void DrawIndexed(UINT count);
+    void SetProjection(DirectX::FXMMATRIX proj);
+    DirectX::XMMATRIX GetProjection() const;
 };
 
